@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,8 +10,11 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import fakeAuth from '../utils/fakeAuth';
+import { Redirect } from 'react-router-dom';
+import { withStyles } from '@material-ui/core/styles';
+
 
 function Copyright() {
   return (
@@ -26,7 +29,7 @@ function Copyright() {
   );
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = theme => ({
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -44,10 +47,41 @@ const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-}));
+});
 
-export default function SignIn(props) {
-  const classes = useStyles();
+class SignIn extends Component {
+  //const classes = useStyles();
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      auth: false,
+      email: {
+        touched: false,
+
+      }
+    }
+  }
+  
+  login = () => {
+    fakeAuth.authenticate(() => {
+      this.setState(() => ({
+        auth: true
+      }))
+    })
+  }
+
+
+
+render(){
+  const { classes } = this.props;
+
+  const { auth } = this.state
+
+    if (auth === true) {
+      return <Redirect to='/dashboard' />
+    
+    }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -59,7 +93,7 @@ export default function SignIn(props) {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form}>
+        <form className=''>
           <TextField
             variant="outlined"
             margin="normal"
@@ -81,6 +115,7 @@ export default function SignIn(props) {
             type="password"
             id="password"
             autoComplete="current-password"
+
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -92,8 +127,9 @@ export default function SignIn(props) {
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
-            href='/dashboard'
+            className=''
+            onClick={this.login}
+            //href='/dashboard'
           >Sign In
           </Button>
           </Link>
@@ -119,3 +155,7 @@ export default function SignIn(props) {
     </Container>
   );
 }
+  
+}
+
+export default withStyles(useStyles)(SignIn);
