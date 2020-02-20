@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
-import Link from '@material-ui/core/Link';
 import SignIn from './containers/login';
 import Blank from './containers/blank';
+import Home from './containers/home'
 import Dashboard from './containers/dashboard';
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import fakeAuth from './utils/fakeAuth';
@@ -16,33 +16,24 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 
 
 class App extends Component {
-
-  constructor(props) {
-    super(props)
-
-    this.state = {
-    }
-  }
-
- 
   render() {
 
     return (
-      <Fragment>
-        <Switch>
-          {/* <Route path="/dashboard" component={Dashboard} />
+      <Switch>
+        {/* <Route path="/dashboard" component={Dashboard} />
           <Route path="/login" component={SignIn} />
           <Route path="/blank" component={Blank} />
           <Route path="/" exact component={Home} /> */}
 
-          <div>
-            
-            <Route path="/blank" component={Blank} />
-            <Route path="/" component={SignIn} />
-            <PrivateRoute path='/dashboard' component={Dashboard} />
-          </div>
-        </Switch>
-      </Fragment>
+        <Fragment>
+          <Route path="/login" component={SignIn} />
+          <Route path="/blank" component={Blank} />
+          <Route path="/" exact component={Home} />
+          <PrivateRoute path='/dashboard' component={Dashboard} />
+        </Fragment>       
+        
+         </Switch>
+
     );
   }
 

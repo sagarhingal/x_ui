@@ -51,36 +51,32 @@ const useStyles = theme => ({
 
 class SignIn extends Component {
   //const classes = useStyles();
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      auth: false,
-      email: {
-        touched: false,
-
-      }
-    }
+  state = {
+    auth: false,
+    email: 'Your Email',
+    password: 'Password',
   }
   
-  login = () => {
+  login = (e) => {
+    e.preventDefault();
     fakeAuth.authenticate(() => {
       this.setState(() => ({
         auth: true
       }))
     })
+    console.log(this.state)
   }
 
-
-
+  handleChange = (e) => {
+    this.setState({[e.target.name]: e.target.value});
+    console.log(this.state)
+  }
 render(){
+  
   const { classes } = this.props;
-
   const { auth } = this.state
-
     if (auth === true) {
       return <Redirect to='/dashboard' />
-    
     }
 
   return (
@@ -93,7 +89,7 @@ render(){
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className=''>
+        <form onSubmit={this.login} className={classes.form}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -102,8 +98,12 @@ render(){
             id="email"
             label="Email Address"
             name="email"
+            onChange={this.handleChange}
+            value={this.state.email}
             autoComplete="email"
             autoFocus
+            error={this.state.email === ""}
+            helperText={this.state.email === "" ? 'Empty field!' : ' '}
           />
           <TextField
             variant="outlined"
@@ -113,8 +113,12 @@ render(){
             name="password"
             label="Password"
             type="password"
+            value={this.state.password}
             id="password"
             autoComplete="current-password"
+            onChange={this.handleChange}
+            error={this.state.password === ""}
+            helperText={this.state.password === "" ? 'Empty field!' : ' '}
 
           />
           <FormControlLabel
@@ -127,8 +131,7 @@ render(){
             fullWidth
             variant="contained"
             color="primary"
-            className=''
-            onClick={this.login}
+            className={classes.submit}
             //href='/dashboard'
           >Sign In
           </Button>
